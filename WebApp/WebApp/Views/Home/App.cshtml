@@ -1,0 +1,108 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>App</title>
+
+    <link href="~/css/vanillaCalendar.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/app-layout.css" />
+    <link rel="stylesheet" href="~/css/custom.css" />
+</head>
+<body>
+
+    <div id="main-elem" class="grid-container">
+        <div class="Photo">
+            <img id="mainPhoto" src="~/images/demo-img.jpg" />
+        </div>
+        <div class="Calendar">
+            @* calendar *@
+            <input type="hidden" data-calendar-label="picked" />
+            <button class="vcal-btn" data-calendar-toggle="previous">
+            </button>
+            <button class="vcal-btn" data-calendar-toggle="next">
+            </button>
+            <div id="v-cal">
+                <div class="vcal-header">
+                    <div class="vcal-header__label" data-calendar-label="month">
+                        March 2017
+                    </div>
+                </div>
+
+                <div class="vcal-week">
+                    <span>Mon</span> <span>Tue</span><span>Wed</span> <span>Thu</span> <span>Fri</span> <span>Sat</span> <span>Sun</span>
+                </div>
+                <div class="vcal-body" data-calendar-area="month"></div>
+            </div>
+            @* ./calendar end *@
+            @* events *@
+            <div class="marquee">
+                <span>&bull; Event One &bull; Event Two &bull; Event Three</span>
+            </div>
+            @* ./events *@
+        </div>
+        <div class="Time">
+            <h1 id="time">22:31</h1>
+        </div>
+        <div class="others">
+            <div class="weather">
+                @* forecast *@
+                <table class="forecast-table">
+                    <tbody>
+                        <tr id="forecast-row">
+                            <td>
+                                <span class="forecast hour">00</span>
+                                <span class="forecast temp">
+                                    -- °C
+                                </span>
+                                <img src="~/img/02d.png" />
+                            </td>
+                            <td>
+                                <span class="forecast hour">00</span>
+                                <span class="forecast temp">
+                                    -- °C
+                                </span>
+                                <img src="~/img/02d.png" />
+                            </td>
+                            <td>
+                                <span class="forecast hour">00</span>
+                                <span class="forecast temp">
+                                    -- °C
+                                </span>
+                                <img src="~/img/02d.png" />
+                            </td>
+                            <td>
+                                <span class="forecast hour">00</span>
+                                <span class="forecast temp">
+                                    -- °C
+                                </span>
+                                <img src="~/img/02d.png" />
+                            </td>
+                            <td>
+                                <span class="forecast hour">00</span>
+                                <span class="forecast temp">
+                                    -- °C
+                                </span>
+                                <img src="~/img/02d.png" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                @* ./forecast *@
+            </div>
+        </div>
+    </div>
+
+
+
+    @* https://www.layoutit.com/grid *@
+    @* https://github.com/chrisssycollins/vanilla-calendar *@
+    <script src="~/js/vanillaCalendar.js"></script>
+    <script src="~/js/app.js"></script>
+</body>
+</html>

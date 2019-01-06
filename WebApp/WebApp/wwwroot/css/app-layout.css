@@ -1,0 +1,45 @@
+﻿html, body, .grid-container {
+    height: 100%;
+    margin: 0;
+}
+
+    .grid-container > div {
+        border: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1.5fr 0.5fr;
+    grid-template-areas: "Photo Calendar" "Time others";
+}
+
+.Photo {
+    grid-area: Photo;
+}
+
+.Calendar {
+    grid-area: Calendar;
+}
+
+.Time {
+    grid-area: Time;
+}
+
+.others {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.5fr 1.5fr;
+    grid-template-areas: "weather";
+    grid-area: others;
+}
+
+.events {
+    grid-area: events;
+}
+
+.weather {
+    grid-area: weather;
+}
