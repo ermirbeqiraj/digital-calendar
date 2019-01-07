@@ -329,3 +329,4 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 /WebApp/WebApp/appsettings.Development.json
+/Source/GetImages/drive-client-id.json
