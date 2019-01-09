@@ -330,3 +330,5 @@ ASALocalRun/
 .mfractor/
 /WebApp/WebApp/appsettings.Development.json
 /Source/GetImages/drive-client-id.json
+/Source/GetImages/dd-client-id.json
+/Source/GetCalendarEvents/dd-client-id.json

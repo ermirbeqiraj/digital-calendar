@@ -2,7 +2,6 @@
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -18,9 +17,11 @@ namespace GetImages
     */
     class Program
     {
-        const string CLIENT_ID_FILE_NAME = "drive-client-id.json";
+        const string CLIENT_ID_FILE_NAME = "dd-client-id.json";
         const string DRIVE_FOLDER_ID = "1mF9vGUoGpaHLG_jnP_c2HKyL6o_8HqhZ";
-        static readonly string DOWNLOAD_FOLDER_PATH = @"/var/netcore/webapps/webapp/wwwroot/images";
+
+        static readonly string DOWNLOAD_FOLDER_PATH = @"C:\eb\ermir.net\github\digital-calendar\Source\WebApp\wwwroot\images";
+        //static readonly string DOWNLOAD_FOLDER_PATH = @"/var/netcore/webapps/webapp/wwwroot/images";
         static readonly string[] Scopes = { DriveService.Scope.DriveReadonly };
         static string ApplicationName = "DC-Download-Photos";
 
