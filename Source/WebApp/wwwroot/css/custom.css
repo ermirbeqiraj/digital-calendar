@@ -45,6 +45,13 @@ img {
     border-radius: .1em;
 }
 
+#v-cal .weekend{
+    color: indianred;
+}
+
+.hidden{
+    display: none;
+}
 /*forecast*/
 .forecast-table {
     width: 100%;

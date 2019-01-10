@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -22,11 +23,6 @@ namespace WebApp.Controllers
         {
             _env = env;
             _configs = configuration;
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            return View();
         }
 
         public IActionResult App()
@@ -75,9 +71,39 @@ namespace WebApp.Controllers
             return Ok(result);
         }
 
-        public IActionResult Privacy()
+        [Route("~/api/[action]")]
+        public async Task<IActionResult> GetEvents()
         {
-            return View();
+            var provider = new PhysicalFileProvider(_env.WebRootPath);
+            var file = provider.GetFileInfo(Path.Combine("test-read", "calendar-events.json"));
+            var fileContent = "";
+
+            if (!file.Exists)
+                return NotFound();
+
+            using (var stream = file.CreateReadStream())
+            using (var sr = new StreamReader(stream))
+            {
+                fileContent = await sr.ReadToEndAsync();
+            }
+
+            if (string.IsNullOrEmpty(fileContent))
+                return BadRequest("No content.");
+
+            var events = JsonConvert.DeserializeObject<List<StorageEvents>>(fileContent);
+            var thisDayEvents = events.Where(x => x.Events.Any(e => e.When == DateTime.Now.ToString("yyyy-MM-dd")))
+                                        .SelectMany(sm => sm.Events.Select(x => x.What));
+
+            var holidays = events.Where(x => x.CalendarId == "en.al#holiday@group.v.calendar.google.com")
+                                    .SelectMany(d => d.Events.Select(date => date.When));
+
+            var fontModel = new
+            {
+                today = thisDayEvents,
+                holidays = holidays
+            };
+
+            return Ok(fontModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -1,0 +1,33 @@
+[
+  {
+    "CalendarId": "primary",
+    "Events": [
+      {
+        "What": "test event",
+        "When": "2019-01-16"
+      }
+    ]
+  },
+  {
+    "CalendarId": "en.al#holiday@group.v.calendar.google.com",
+    "Events": [
+      {
+        "What": "New Year's Day",
+        "When": "2019-01-01"
+      },
+      {
+        "What": "New Year's Day (Day 2)",
+        "When": "2019-01-02"
+      }
+    ]
+  },
+  {
+    "CalendarId": "#contacts@group.v.calendar.google.com",
+    "Events": [
+      {
+        "What": "Avni Cani's birthday",
+        "When": "2019-01-21"
+      }
+    ]
+  }
+]

@@ -5,8 +5,11 @@ let CURRENT_IMAGE_INDEX = -1;
 window.addEventListener('load', function () {
     // init calendar
     vanillaCalendar.init({
-        disablePastDays: true
+        disablePastDays: false
     });
+
+    // get calendar events
+    getEvents();
 
     // setup time & display
     showTime();
@@ -59,12 +62,10 @@ function getImages() {
 }
 
 function getWeather() {
-    console.log('get weather');
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
-            console.log(this.responseText);
-            const weatherInfo = JSON.parse(this.responseText);
+            let weatherInfo = JSON.parse(this.responseText);
             let weatherTD = "";
 
             for (var i = 0; i < weatherInfo.length; i++) {
@@ -83,5 +84,39 @@ function getWeather() {
     };
 
     xhttp.open("GET", "/api/getweather", true);
+    xhttp.send();
+}
+
+function getEvents() {
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            let eventsObj = JSON.parse(this.responseText);
+            if (eventsObj) {
+                // set holidays
+                let holidays = eventsObj["holidays"];
+                for (let i = 0; i < holidays.length; i++) {
+                    let div = document.querySelector(`div[data-id="${holidays[i]}"]`);
+                    if (div)
+                        div.classList.add('weekend');
+                }
+                // show thisday events
+                let thisDay = eventsObj["today"];
+                let msg = "";
+                for (let i = 0; i < thisDay.length; i++) {
+                    msg += `&bull; ${thisDay[i]}`;
+                }
+
+                if (msg) {
+                    document.querySelector('.marquee').innerHTML = `<span>${msg}</span>`;
+                }
+                else {
+                    document.querySelector('.marquee').classList.add('hidden');
+                }
+            }
+        }
+    };
+
+    xhttp.open("GET", "/api/getevents", true);
     xhttp.send();
 }
