@@ -74,36 +74,45 @@ namespace WebApp.Controllers
         [Route("~/api/[action]")]
         public async Task<IActionResult> GetEvents()
         {
-            var provider = new PhysicalFileProvider(_env.WebRootPath);
-            var file = provider.GetFileInfo(Path.Combine("test-read", "calendar-events.json"));
-            var fileContent = "";
-
-            if (!file.Exists)
-                return NotFound();
-
-            using (var stream = file.CreateReadStream())
-            using (var sr = new StreamReader(stream))
+            try
             {
-                fileContent = await sr.ReadToEndAsync();
+                var provider = new PhysicalFileProvider(_env.WebRootPath);
+                var file = provider.GetFileInfo(Path.Combine("calendar", "calendar-events.json"));
+                var fileContent = "";
+
+                if (!file.Exists)
+                    return NotFound();
+
+                using (var stream = file.CreateReadStream())
+                using (var sr = new StreamReader(stream))
+                {
+                    fileContent = await sr.ReadToEndAsync();
+                }
+
+                if (string.IsNullOrEmpty(fileContent))
+                    return BadRequest("No content.");
+
+                var events = JsonConvert.DeserializeObject<List<StorageEvents>>(fileContent);
+                var thisDayEvents = events.Where(x => x.Events.Any(e => e.When == DateTime.Now.ToString("yyyy-MM-dd")))
+                                            .SelectMany(sm => sm.Events.Select(x => x.What));
+
+                var holidays = events.Where(x => x.CalendarId == "en.al#holiday@group.v.calendar.google.com")
+                                        .SelectMany(d => d.Events.Select(date => date.When));
+
+                var fontModel = new
+                {
+                    today = thisDayEvents,
+                    holidays = holidays
+                };
+
+                return Ok(fontModel);
             }
-
-            if (string.IsNullOrEmpty(fileContent))
-                return BadRequest("No content.");
-
-            var events = JsonConvert.DeserializeObject<List<StorageEvents>>(fileContent);
-            var thisDayEvents = events.Where(x => x.Events.Any(e => e.When == DateTime.Now.ToString("yyyy-MM-dd")))
-                                        .SelectMany(sm => sm.Events.Select(x => x.What));
-
-            var holidays = events.Where(x => x.CalendarId == "en.al#holiday@group.v.calendar.google.com")
-                                    .SelectMany(d => d.Events.Select(date => date.When));
-
-            var fontModel = new
+            catch (Exception ex)
             {
-                today = thisDayEvents,
-                holidays = holidays
-            };
-
-            return Ok(fontModel);
+                while (ex.InnerException != null)
+                    ex = ex.InnerException;
+                return BadRequest($"{ex.Message}:: {ex.StackTrace}");
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

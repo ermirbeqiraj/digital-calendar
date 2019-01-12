@@ -14,7 +14,7 @@
 
 
   <ItemGroup>
-    <Folder Include="wwwroot\test-read\" />
+    <Folder Include="wwwroot\calendar\" />
   </ItemGroup>
 
 </Project>

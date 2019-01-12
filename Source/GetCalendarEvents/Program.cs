@@ -29,7 +29,7 @@ namespace GetCalendarEvents
 #if DEBUG
         const string STORAGE_FILE_PATH = "calendar-events.json";
 #else
-        const string STORAGE_FILE_PATH = "/var/netcore/config-files/calendar-events.json";
+        const string STORAGE_FILE_PATH = "/var/netcore/web/wwwroot/calendar/calendar-events.json";
 #endif
 
         static void Main(string[] args)
@@ -45,7 +45,6 @@ namespace GetCalendarEvents
                     "user",
                     CancellationToken.None,
                     new FileDataStore(credPath, true)).Result;
-                Console.WriteLine("Credential file saved to: " + credPath);
             }
 
             // Create Google Calendar API service.
@@ -65,8 +64,9 @@ namespace GetCalendarEvents
                     Events = evt
                 });
             }
-
-            Write(JsonConvert.SerializeObject(storageModel));
+            
+            var eventsString = JsonConvert.SerializeObject(storageModel);
+            File.WriteAllText(STORAGE_FILE_PATH, eventsString);
         }
 
         private static List<EventModel> QueryEvents(string calendarId, ref CalendarService service)
@@ -75,7 +75,7 @@ namespace GetCalendarEvents
 
             var now = DateTime.Now;
             // Define parameters of request.
-            EventsResource.ListRequest request = service.Events.List(calendarId/*"en.al#holiday@group.v.calendar.google.com"*/);
+            EventsResource.ListRequest request = service.Events.List(calendarId);
             // for current month only
             request.TimeMin = new DateTime(now.Year, now.Month, 1);
             request.TimeMax = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
@@ -95,16 +95,6 @@ namespace GetCalendarEvents
             }
 
             return eventsObj;
-        }
-
-        private static void Write(string content)
-        {
-            using (var fs = new FileStream(STORAGE_FILE_PATH, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
-            using (var sw = new StreamWriter(fs))
-            {
-                sw.Write(content);
-                sw.Flush();
-            }
         }
     }
 }
